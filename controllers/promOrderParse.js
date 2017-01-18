@@ -1,23 +1,34 @@
 /**
  * Created by Code on 11.12.2016.
  */
-var db = require('./../bin/knex');
-var xml2js = require('.//xml2js');
+var fetch = require("node-fetch");
+var Promise = require('bluebird');
+var xml2js = Promise.promisifyAll(require('xml2js'));
 
-var prom_orders = [];
+var orderQueries = require('./../models/promOrderParse');
 
-function cb(obj){
-    prom_orders = obj['orders']['order'];
+var parseStringAsync = xml2js.parseStringAsync;
+
+function parsePromOrders(url){
+    return fetch(url)
+        .then(function (res){
+            return res.text();
+        }).then(function (text){
+            return parseStringAsync(text)
+        }).catch(function (err){
+            return err.message;
+        });
 }
 
-function promOrderParse(item){
+//TODO with generator like Promise.coroutine
+function writeOrdersToDb(item){
     var prom_orders_products = [];
 
     for (var key in item){
 
         if (key === '$'){
             for (var key2 in item['$']){
-                (item[key2] = item['$'][key2]);
+                item[key2] = item['$'][key2];
             }
             delete item['$'];continue;
         }
@@ -32,7 +43,7 @@ function promOrderParse(item){
 
             for(var i = 0; i < prom_orders_products.length; i++){
                 prom_orders_products[i]['order_id'] = item['id'];
-                cbForItem(prom_orders_products[i]);
+                writeItemsToDb(prom_orders_products[i]);
             }
 
             delete item['items'];
@@ -52,64 +63,30 @@ function promOrderParse(item){
         }
     }
 
-    db('orders_from_prom').where('id', item['id'])
-        .update(item)
-        .then(function (row){
-            if(!row){
-                return db('orders_from_prom').insert(item)
-                    .catch(function (err){
-                        console.log('insert error: ' + err);
-                    })}
-        })
-        .catch(function (err){
-            console.log('update error: ' + err);
-        });
+    orderQueries.ordersToDb(item);
 }
 
-function cbForItem(product){
+function writeItemsToDb(product){
     for(var key in product){
         if (Array.isArray(product[key])){
             product[key] = product[key].join('|');
         }
     }
 
-    db('order_items').where(function (){
-        this.where('order_id', product['order_id'])
-            .andWhere('sku', product['sku'])
-    })
-    .update({
-        quantity: product['quantity'],
-        price: product['price']
-    })
-    .then(function (row){
-        if(!row){
-            return db('order_items').insert(
-                {
-                    order_id: product['order_id'],
-                    sku: product['sku'],
-                    quantity: product['quantity'],
-                    price: product['price']
-                })
-                .catch(function (err){
-                    console.log('insert error: ' + err);
-                })
-        }
-    })
-    .catch(function (err){
-        console.log('update error: ' + err);
-    })
+    orderQueries.itemsToDb(product);
 }
 
-module.exports = {
-    getFromXml: function(req, res, next){
-        xml2js.parseXmlFile('../NonProjectFiles/orders_from_prom.xml', cb);
-        next();
-    },
+module.exports = function (){
+    return Promise.resolve(parsePromOrders('https://my.parseProm.ua/cabinet/export_orders/xml/2424009?hash_tag=ddd24a3cf7d2b78a186489cbf6741885'))
+        .then(function (data){
+            if (typeof data === 'object'){
+                data = data['orders']['order'];
 
-    parse: function (req, res, next){
-        for(var i = 0; i < prom_orders.length; i++){
-            promOrderParse(prom_orders[i]);
+                for (var i = 0; i < data.length; i++){
+                    writeOrdersToDb(data[i]);
+                }
         }
-    next();
-    }
-}
+
+            return data;
+        });
+};

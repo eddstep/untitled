@@ -1,10 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-var controller = require('./../controllers/controllerOrderParse');
-
-router.get('/', controller.parseOrders, controller.parseOrderProducts, function (req, res){
-    res.end();
+router.get('/', function (req, res){
+    res.send('done');
 });
 
 module.exports = router;
