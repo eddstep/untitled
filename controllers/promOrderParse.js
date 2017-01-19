@@ -77,7 +77,7 @@ function writeItemsToDb(product){
 }
 
 module.exports = function (){
-    return Promise.resolve(parsePromOrders('https://my.parseProm.ua/cabinet/export_orders/xml/2424009?hash_tag=ddd24a3cf7d2b78a186489cbf6741885'))
+    return Promise.resolve(parsePromOrders('https://my.Prom.ua/cabinet/export_orders/xml/2424009?hash_tag=ddd24a3cf7d2b78a186489cbf6741885'))
         .then(function (data){
             if (typeof data === 'object'){
                 data = data['orders']['order'];
