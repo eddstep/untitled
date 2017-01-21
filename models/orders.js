@@ -3,11 +3,24 @@
  */
 var db = require('./../bin/knex');
 
+function subQuery(dbTable, state){
+    return db(dbTable).where('state', state).select('id');
+}
+
 module.exports = {
-    getOrderItems: function (){
-        return db.select('order_items.sku', 'goods.name', db.raw('sum(quantity)'))
-            .from('order_items')
-            .innerJoin('goods', 'order_items.sku', 'goods.sku')
-            .groupBy('order_items.sku')
-    }
+    getOcOrderItems: function (){
+        return db('order_items').where('order_id', 'in', subQuery('orders_from_oc', 5))
+            .join('goods', 'goods.sku', '=', 'order_items.sku')
+            .select('order_items.sku', 'goods.name', db.raw('sum(quantity) as ocQuantity'))
+            .groupBy('order_items.sku');
+    },
+
+    getPromOrderItems: function (){
+        return db('order_items').where('order_id', 'in', subQuery('orders_from_prom', 'closed'))
+            .join('goods', 'goods.sku', '=', 'order_items.sku')
+            .select('order_items.sku', 'goods.name', db.raw('sum(quantity) as promQuantity'))
+            .groupBy('order_items.sku');
+    },
+
+
 };

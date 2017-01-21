@@ -11,7 +11,7 @@ module.exports = {
             'order_status_id', 'currency_value', 'date_added', 'date_modified').from('oc_order')
     },
     ordersToDb: function (elem){
-        return db('orders_from_controller').where('id', elem['order_id'])
+        return db('orders_from_oc').where('id', elem['order_id'])
             .update({
                 name: elem['firstname'] + ' ' + elem['lastname'],
                 email: elem['email'],
@@ -29,7 +29,7 @@ module.exports = {
             })
             .then(function (row){
                 if (!row){
-                    return db('orders_from_controller').insert({
+                    return db('orders_from_oc').insert({
                         id: elem['order_id'],
                         name: elem['firstname'] + ' ' + elem['lastname'],
                         email: elem['email'],

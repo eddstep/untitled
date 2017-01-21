@@ -1,5 +1,7 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+	div(class=['ui', 'raised', 'segment'])
+		a(href='orders')
+			button(class=['ui', 'button']) Все товары в заказах
+

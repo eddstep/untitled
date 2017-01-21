@@ -1,19 +1,20 @@
 extends layout
 
 block content
-	h1(class=['ui', 'violet', 'header'])= 'Проданные товары: ' + products.length + ' наименований'
-
-	table(class=['ui', 'sortable', 'celled', 'table'])
+	h2(class=['ui', 'violet', 'top', 'attached', 'header'])= products.length + ' наименований'
+	table(class=['ui', 'sortable', 'celled', 'attached', 'table'])
 		thead
 			tr
 				th Код товара
 				th Название
-				th Количество
+				th Пордано на проме
+				th Продано на oc
 				th Остаток
 		tbody
 			for item in products
 				tr
 					td= item['sku']
 					td= item['name']
-					td= item['sum(quantity)']
-					td= '?'
+					td= item['promQuantity']
+					td= item['ocQuantity']
+					td= item['inStock']
