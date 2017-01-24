@@ -7,14 +7,18 @@ block content
 			tr
 				th Код товара
 				th Название
+				th Приход
 				th Пордано на проме
 				th Продано на oc
+				th Общее
 				th Остаток
 		tbody
 			for item in products
 				tr
 					td= item['sku']
 					td= item['name']
+					td= item['quantity']
 					td= item['promQuantity']
 					td= item['ocQuantity']
+					td= item['total']
 					td= item['inStock']
