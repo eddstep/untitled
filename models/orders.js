@@ -21,6 +21,4 @@ module.exports = {
             .select('order_items.sku', 'goods.name', db.raw('sum(quantity) as promQuantity'))
             .groupBy('order_items.sku');
     },
-
-
 };

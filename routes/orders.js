@@ -20,11 +20,12 @@ router.use(function (req, res, next){
         })
 });
 
-router.get('/', function (req, res){
-    Promise.resolve(orders.orderProducts())
+router.get('/', function (req, res, next){
+    orders.orderProducts()
         .then(function (data){
             res.render('orders', {title: 'Все товары из заказов', products: data});
-        });
+        })
+        .catch(next);
 });
 
 module.exports = router;

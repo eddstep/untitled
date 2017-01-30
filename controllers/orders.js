@@ -5,21 +5,6 @@ var Promise = require('bluebird');
 var orders = require('./../models/orders');
 var goods = require('./../models/goods');
 
-/*function assignObj(arrOfObj){
- var data = arrOfObj.shift();
-
- arrOfObj.forEach(function (elem){
- elem.forEach(function (obj){
- var
- if(obj['sku'] in data){
- Object.assign(data, obj);
- return;
- }
- data.push(obj)
- })
- })
- }*/
-
 function assign(arr){
     var result = [];
 
