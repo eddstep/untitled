@@ -7,7 +7,7 @@ module.exports = {
     getIncomingGoods: function (){
         return db('incoming_goods')
             .join('goods', 'goods.sku', '=', 'incoming_goods.sku')
-            .select('incoming_goods.sku', 'incoming_goods.quantity', 'goods.name').groupBy('sku');
+            .select('incoming_goods.sku', db.raw('sum(incoming_goods.quantity) as quantity'), 'goods.name').groupBy('sku');
     }
 };
 

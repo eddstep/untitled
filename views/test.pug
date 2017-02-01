@@ -1,0 +1,12 @@
+extends layout
+
+block content
+	if data
+		each val in data
+			div
+				each val2 in val
+					p= val2
+	else
+		h2= err.message
+		h3= err.status
+		pre #{err.stack}
