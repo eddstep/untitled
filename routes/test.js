@@ -1,27 +1,64 @@
 /**
  * Created by Code on 29.01.2017.
  */
+var dev = require('knex')({
+    client: 'mysql',
+    connection: {
+        host: 'movik147.coolvds.com',
+        user: 'root',
+        password: 'dE3X7lC9',
+        database: 'dev'
+    },
+    pool: {min: 0, max: 10},
+    useNullAsDefault: true
+});
 var express = require('express');
 var router = express.Router();
-var Promise = require('bluebird');
-var db = require('./../bin/knex');
-var orders = require('./../controllers/orders');
+var goods = require('./../models/goods');
 
-function subQuery(dbTable, state){
-    return db(dbTable).where('state', state).select('id');
-}
+var ocList, list = [];
 
-function getData(){
-    return db('order_items').where('order_id', 'in', subQuery('orders_from_oc', 5))
-        .join('goods', 'goods.sku', '=', 'order_items.sku')
-        .select('order_items.sku', 'goods.name', db.raw('sum(quantity) as ocQuantity'))
-        .groupBy('order_items.sku');
-}
+router.use(function (req, res, next){
+    goods.getIncomingGoods().then(function (data){
+        list = data;
+        next();
+    })
+        .catch(next);
+});
+
+router.use(function (req, res, next){
+    dev('product')
+        .where('status', '=', '1')
+        .join('product_description', 'product.product_id', '=', 'product_description.product_id')
+        .select('product.model', 'product_description.name')
+        .orderBy('product.model')
+        .then(function (data){
+            ocList = data;
+            next();
+        })
+        .catch(next);
+});
 
 router.use('/', function (req, res, next){
-    orders.orderProducts().then(function (data){
-        res.send(data);
-    }).catch(next);
+
+    var newArr = [];
+    var id = 0;
+
+    out:
+        for (var k = 0; k < ocList.length; k++){
+            for (var i = 0; i < list.length; i++){
+                if (ocList[k]['model'] == list[i]['sku']){
+                    continue out;
+                }
+            }
+            ;
+            ocList[k]['id'] = ++id;
+            newArr.push(ocList[k]);
+        }
+
+    res.render('test', {
+        ocist: newArr
+    });
 });
 
 module.exports = router;

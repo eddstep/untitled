@@ -6,6 +6,7 @@ block content
 		thead
 			tr
 				th Код товара
+				th Код магазина
 				th Название
 				th Приход
 				th Пордано на проме
@@ -16,6 +17,7 @@ block content
 			for item in products
 				tr
 					td= item['sku']
+					td= item['oc_id']
 					td= item['name']
 					td= item['quantity']
 					td= item['promQuantity']

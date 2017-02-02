@@ -11,7 +11,7 @@ module.exports = {
     getOcOrderItems: function (){
         return db('order_items').where('order_id', 'in', subQuery('orders_from_oc', 5))
             .join('goods', 'goods.sku', '=', 'order_items.sku')
-            .select('order_items.sku', 'goods.name', db.raw('sum(quantity) as ocQuantity'))
+            .select('order_items.sku', 'goods.name', 'goods.oc_id', db.raw('sum(quantity) as ocQuantity'))
             .groupBy('order_items.sku');
     },
 

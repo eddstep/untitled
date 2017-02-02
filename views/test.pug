@@ -1,12 +1,19 @@
 extends layout
 
 block content
-	if data
-		each val in data
-			div
-				each val2 in val
-					p= val2
-	else
-		h2= err.message
-		h3= err.status
-		pre #{err.stack}
+	div(class=['ui', 'grid'])
+		div(class=['eight', 'wide', 'column'])
+			table(class=['ui', 'sortable', 'celled', 'attached', 'table'])
+				thead
+					tr
+						th=    'ид'
+						th= 'Номер в магазине'
+						th= 'Код'
+						th= 'Названиеr'
+				tbody
+					each val in ocist
+						tr
+							td= val['id']
+							td= val['ocid']
+							td= val['model']
+							td= val['name']
