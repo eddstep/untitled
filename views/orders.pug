@@ -5,17 +5,19 @@ block content
 	table(class=['ui', 'sortable', 'celled', 'attached', 'table'])
 		thead
 			tr
+				th Номер
 				th Код товара
 				th Код магазина
 				th Название
 				th Приход
-				th Пордано на проме
+				th Продано на проме
 				th Продано на oc
 				th Общее
 				th Остаток
 		tbody
-			for item in products
+			for item, index in products
 				tr
+					td= index + 1
 					td= item['sku']
 					td= item['oc_id']
 					td= item['name']
