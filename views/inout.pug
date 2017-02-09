@@ -1,0 +1,27 @@
+extends layout
+
+block content
+	h2(class=['ui', 'violet', 'top', 'attached', 'header'])= 'Дебит Кредит в $'
+	table(class=['ui', 'sortable', 'celled', 'table'])
+		thead
+			tr
+				th Код товара
+				th Сумма за проданный товар
+				th Количество проданного товара
+				th Сумма за купленный товар
+				th Количество купленного товара
+		tbody
+			for item in products
+				tr
+					td= item['sku']
+					td= item['sellsum']
+					td= item['sellq']
+					td= item['buysum']
+					td= item['buyq']
+		tfoot
+			tr
+				td
+				td= selltotal
+				td
+				td= buytotal
+				td
