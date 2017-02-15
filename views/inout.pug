@@ -36,11 +36,11 @@ block content
 				tr
 					td= item['sku']
 					td= item['goodname']
-					td= item['sellq'] + ' $'
-					td #{item['sellp'] ? item['sellp'].toFixed(2) : ''}
-					td #{item['sellsum'] ? item['sellsum'].toFixed(2) : ''}
+					td #{item['sellq'] ? item['sellq'] : ''}
+					td #{item['sellp'] ? item['sellp'].toFixed(2) + ' $' : ''}
+					td #{item['sellsum'] ? item['sellsum'].toFixed(2) + ' $' : ''}
 					td= item['igq']
 					td= item['price'] + ' $'
 					td= item['igsum'] + ' $'
-					td #{item['percent'] ? item['percent'].toFixed(2) : ''}
-					td #{item['debit'] ? item['debit'].toFixed(2) : ''}
+					td #{item['sellq'] > 0 && isFinite(item['percent']) ? item['percent'].toFixed(2) + ' %' : ''}
+					td #{item['debit'] ? item['debit'].toFixed(2) + ' $' : ''}
