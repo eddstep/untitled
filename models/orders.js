@@ -3,8 +3,8 @@
  */
 var db = require('./../bin/knex');
 
-function subQuery(dbTable, state){
-    return db(dbTable).where('state', state).select('id');
+function subQuery(table, state){
+    return db(table).where('state', state).select('id');
 }
 
 module.exports = {
@@ -21,4 +21,8 @@ module.exports = {
             .select('order_items.sku', 'goods.name', db.raw('sum(quantity) as promQuantity'))
             .groupBy('order_items.sku');
     },
+
+    getOrdersTotalSum: function (table, state){
+        return db(table).where('state', state).select(db.raw('sum(priceUAH) as sum'));
+    }
 };

@@ -10,9 +10,10 @@ router.get('/', function (req, res, next){
     inout.calcMoney().then(function (data){
         res.render('inout', {
             title: 'Дебит кредит товара',
-            products: data
-        })
-    })
+            products: data.products,
+            total: data.total
+        });
+    });
 });
 
 module.exports = router;

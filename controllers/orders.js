@@ -41,5 +41,12 @@ module.exports = {
         }).then(function (result){
             return getTotals(result);
         });
+    },
+
+    orderTotalSum: function (){
+        return Promise.join(orders.getOrdersTotalSum('orders_from_oc', '5'), orders.getOrdersTotalSum('orders_from_prom', 'closed'), function (ocOrderTotalSum, promOrderTotalSum){
+            var orderTotalSum = ocOrderTotalSum[0]['sum'] + promOrderTotalSum[0]['sum'];
+            return [ocOrderTotalSum[0]['sum'], promOrderTotalSum[0]['sum'], orderTotalSum.toFixed(2)]
+        })
     }
 };

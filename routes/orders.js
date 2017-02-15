@@ -8,6 +8,8 @@ var parseProm = require('./../controllers/promOrderParse');
 var parseOc = require('./../controllers/ocOrderParse');
 var orders = require('./../controllers/orders');
 
+var productData = [];
+var orderData = [];
 
 /* GET parse page. */
 router.use(function (req, res, next){
@@ -20,10 +22,19 @@ router.use(function (req, res, next){
         })
 });
 
+
 router.get('/', function (req, res, next){
-    orders.orderProducts()
+    Promise.all([orders.orderProducts(), orders.orderTotalSum()])
         .then(function (data){
-            res.render('orders', {title: 'Все товары из заказов', products: data});
+            productData = data[0];
+            orderData = data[1];
+        })
+        .then(function (){
+            res.render('orders', {
+                title: 'Все товары из заказов',
+                products: productData,
+                sum: orderData
+            });
         })
         .catch(next);
 });

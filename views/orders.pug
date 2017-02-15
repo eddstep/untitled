@@ -1,7 +1,20 @@
 extends layout
 
 block content
-	h2(class=['ui', 'violet', 'top', 'attached', 'header'])= products.length + ' наименований'
+	div(class=['ui', 'five', 'column', 'grid'])
+		div(class=['column'])
+			a(href='/')
+				button(class=['ui', 'labeled', 'icon', 'button']) Назад
+					i(class=['ui', 'left', 'arrow', 'icon'])
+		div(class=['column'])
+			h3(class=['ui', 'violet', 'top', 'header'])= products.length + ' наименований'
+		div(class=['column'])
+			h3(class=['ui', 'violet', 'top', 'header'])= 'OC - На сумму: ' + sum[0] + ' грн'
+		div(class=['column'])
+			h3(class=['ui', 'violet', 'top', 'header'])= 'PROM - На сумму: ' + sum[1] + ' грн'
+		div(class=['column'])
+			h3(class=['ui', 'violet', 'top', 'header'])= 'Итого: ' + sum[2] + ' грн'
+	div(class=['ui', 'clearing', 'divider'])
 	table(class=['ui', 'sortable', 'celled', 'attached', 'table'])
 		thead
 			tr
