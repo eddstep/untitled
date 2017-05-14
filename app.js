@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var cron = require('./bin/cron');
 
 var routes = require('./routes/index');
 var orders = require('./routes/orders');
@@ -28,6 +29,11 @@ app.use('/', routes);
 app.use('/orders', orders);
 app.use('/deb-cr', inout);
 app.use('/test', test);
+
+app.use(function (req, res, next){
+  cron.start();
+  next();
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

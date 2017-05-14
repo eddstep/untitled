@@ -18,29 +18,26 @@ block content
 	table(class=['ui', 'sortable', 'celled', 'structured', 'table'])
 		thead
 			tr
-				th(rowspan=2) Код
-				th(rowspan=2) Название
-				th(colspan=3) Продажи
-				th(colspan=3) Закупки
-				th(rowspan=2) Накрутка
-				th(rowspan=2) Прибыль
-			tr
-				th Количество
+				th Код
+				th Название
+				th Прод. кол
 				th Цена
 				th Сумма
-				th Количество
+				th Закуп кол
 				th Посл. цена
 				th Сумма
+				th Накрутка
+				th Прибыль
 		tbody
 			for item in products
 				tr
 					td= item['sku']
 					td= item['goodname']
 					td #{item['sellq'] ? item['sellq'] : ''}
-					td #{item['sellp'] ? item['sellp'].toFixed(2) + ' $' : ''}
-					td #{item['sellsum'] ? item['sellsum'].toFixed(2) + ' $' : ''}
+					td #{item['sellp'] ? item['sellp'].toFixed(2) : ''}
+					td #{item['sellsum'] ? item['sellsum'].toFixed(2) : ''}
 					td= item['igq']
-					td= item['price'] + ' $'
-					td= item['igsum'] + ' $'
-					td #{item['sellq'] > 0 && isFinite(item['percent']) ? item['percent'].toFixed(2) + ' %' : ''}
-					td #{item['debit'] ? item['debit'].toFixed(2) + ' $' : ''}
+					td= item['price']
+					td= item['igsum']
+					td #{item['sellq'] > 0 && isFinite(item['percent']) ? item['percent'].toFixed(2) : ''}
+					td #{item['debit'] ? item['debit'].toFixed(2) : ''}
