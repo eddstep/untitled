@@ -48,5 +48,14 @@ module.exports = {
             var orderTotalSum = ocOrderTotalSum[0]['sum'] + promOrderTotalSum[0]['sum'];
             return [ocOrderTotalSum[0]['sum'], promOrderTotalSum[0]['sum'], orderTotalSum.toFixed(2)]
         })
+    },
+
+    orderGroupByDate: function (){
+        return Promise.join(orders.getOrdersByMonth('orders_from_oc', '5'), orders.getOrdersByMonth('orders_from_prom', 'closed'), function (ocOrdersByMonth, promOrdersByMonth){
+            return {
+                oc: ocOrdersByMonth,
+                prom: promOrdersByMonth
+            }
+        })
     }
 };

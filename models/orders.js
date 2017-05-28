@@ -24,5 +24,10 @@ module.exports = {
 
     getOrdersTotalSum: function (table, state){
         return db(table).where('state', state).select(db.raw('sum(priceUAH) as sum'));
+    },
+
+    getOrdersByMonth: function (table, state){
+        return db(table).where('state', state).select(db.raw('count(priceUAH) as quantity, sum(priceUAH) as sum, monthName(ate) as month, year(date) as year'))
+            .groupByRaw('month(date) ORDER BY date DESC');
     }
 };

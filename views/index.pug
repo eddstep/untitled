@@ -5,5 +5,52 @@ block content
 		a(href='orders')
 			button(class=['ui', 'button']) Все товары в заказах
 		a(href='deb-cr')
-			button(class=['ui', 'button']) Оборот&nbsp товара
-
+			button(class=['ui', 'button']) Оборот товара
+	h3(class=['ui', 'horizontal', 'divider']) Отчет по месяцам
+	div(class=['ui', 'four', 'column', 'grid'])
+		div(class=['column', 'stretched'])
+			h4(class=['ui', 'header', 'block']) Дата
+		div(class=['column'])
+			div(class=['column'])
+				h4(class=['ui', 'header', 'block']) OC
+			div(class=['column'])
+				div(class=['ui', 'two', 'column', 'grid'])
+					div(class=['column'])
+						h4(class=['ui']) Количество
+					div(class=['column'])
+						h4(class=['ui']) Сумма
+		div(class=['column'])
+			div(class=['column'])
+				h4(class=['ui', 'header', 'block']) Prom
+			div(class=['column'])
+				div(class=['ui', 'two', 'column', 'grid'])
+					div(class=['column'])
+						h4(class=['ui', 'center', 'aligned', 'header']) Количество
+					div(class=['column'])
+						h4(class=['ui', 'center', 'aligned', 'header']) Сумма
+		div(class=['column'])
+			div(class=['column'])
+				h4(class=['ui', 'header', 'block']) Общее
+			div(class=['column'])
+				div(class=['ui', 'two', 'column', 'grid'])
+					div(class=['column'])
+						h4(class=['ui']) Количество
+					div(class=['column'])
+						h4(class=['ui']) Сумма
+	div(class=['ui', 'two', 'column', 'grid'])
+		div(class=['column'])
+			table(class=['ui', 'table'])
+				for item in data.oc
+					tr
+						td= item['month'] + ' / ' + item['year']
+						td
+						td= item['quantity']
+						td= item['sum'] + ' грн'
+		div(class=['column'])
+			table(class=['ui', 'table'])
+				for item, index in data.prom
+					tr
+						td= item['quantity']
+						td= item['sum'] + ' грн'
+						td= (item['quantity'] + data.oc[index]['quantity'])
+						td= (item['sum'] + data.oc[index]['sum']).toFixed(2) + ' грн'
